@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx playwright *)",
+      "Bash(npx tsc *)",
+      "Skill(playwright-cli)",
+      "Bash(cp /tmp/inspect-captcha.js /Users/abhkachr/Documents/workspace/playwright-framework/inspect-captcha.js)",
+      "Bash(node inspect-captcha.js)",
+      "Bash(rm inspect-captcha.js)"
+    ]
+  }
+}

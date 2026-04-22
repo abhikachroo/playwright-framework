@@ -1,0 +1,8 @@
+{
+  "displayName": "EcoSet Config",
+  "baseUrl": "https://ecoset-config-ppr.se.com",
+  "apiUrl": "https://ecoset-config-ppr.se.com/api",
+  "loginPath": "/",
+  "username": "gregorio0@ngainitr.com",
+  "password": "HM_Auto_tests1"
+}
