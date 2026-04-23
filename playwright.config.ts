@@ -1,1 +1,105 @@
-aW1wb3J0IHsgZGVmaW5lQ29uZmlnLCBkZXZpY2VzIH0gZnJvbSAnQHBsYXl3cmlnaHQvdGVzdCc7CmltcG9ydCBkb3RlbnYgZnJvbSAnZG90ZW52JzsKaW1wb3J0ICogYXMgZnMgZnJvbSAnZnMnOwppbXBvcnQgKiBhcyBwYXRoIGZyb20gJ3BhdGgnOwoKZG90ZW52LmNvbmZpZygpOwoKY29uc3QgZW52aXJvbm1lbnQgPSAocHJvY2Vzcy5lbnYuRU5WSVJPTk1FTlQgPz8gJ3ByZXByb2QnKS50b0xvd2VyQ2FzZSgpOwpjb25zdCBjb25maWdGaWxlICA9IHJlcXVpcmUocGF0aC5qb2luKF9fZGlybmFtZSwgJ3NyYy9jb25maWcvZW52JywgZW52aXJvbm1lbnQsICdjb25maWcuanNvbicpKTsKCmNvbnN0IEFVVEhfRklMRSA9IHBhdGguam9pbihfX2Rpcm5hbWUsICcuYXV0aCcsICdzdGF0ZS5qc29uJyk7CgovLyBPbmx5IGF0dGFjaCBzdG9yYWdlU3RhdGUgd2hlbiB0aGUgYXV0aCBmaWxlIGFjdHVhbGx5IGV4aXN0cy4KLy8gV2hlbiBhdXRoIHNldHVwIGlzIHNraXBwZWQgKGUuZy4gQWthbWFpIFdBRiBibG9ja3Mgc2FuZGJveCBlZ3Jlc3Mgb24gcHJlcHJvZCksCi8vIHRoZSBmaWxlIHdpbGwgbm90IGJlIHByZXNlbnQg4oCUIGRvd25zdHJlYW0gY2hyb21pdW0gdGVzdHMgc3RpbGwgcnVuIGJ1dAovLyB3aXRob3V0IGEgcHJlLWF1dGhlbnRpY2F0ZWQgc2Vzc2lvbiByYXRoZXIgdGhhbiBmYWlsaW5nIG91dHJpZ2h0Lgpjb25zdCBzdG9yYWdlU3RhdGUgPSBmcy5leGlzdHNTeW5jKEFVVEhfRklMRSkgPyBBVVRIX0ZJTEUgOiB1bmRlZmluZWQ7Cgpjb25zdCBDSFJPTUVfT1BUSU9OUyA9IHsKICAuLi5kZXZpY2VzWydEZXNrdG9wIENocm9tZSddLAogIC8vIGhlYWRsZXNzIG1vZGUgcmVxdWlyZWQgZm9yIENJL3NhbmRib3gg4oCUIEdvb2dsZSBDaHJvbWUgYmluYXJ5IGlzIG5vdCBhdmFpbGFibGUKICBoZWFkbGVzczogdHJ1ZSwKICBsYXVuY2hPcHRpb25zOiB7CiAgICAvLyBTdXBwcmVzcyBDaHJvbWUncyBhdXRvbWF0aW9uIHNpZ25hbHMgc28gQ2xvdWRmbGFyZSBUdXJuc3RpbGUgYXV0by1zb2x2ZXMKICAgIGFyZ3M6IFsKICAgICAgJy0tZGlzYWJsZS1ibGluay1mZWF0dXJlcz1BdXRvbWF0aW9uQ29udHJvbGxlZCcsCiAgICAgICctLWRpc2FibGUtaW5mb2JhcnMnLAogICAgICAnLS1uby1maXJzdC1ydW4nLAogICAgICAnLS1uby1kZWZhdWx0LWJyb3dzZXItY2hlY2snLAogICAgICAnLS1uby1zYW5kYm94JywKICAgICAgJy0tZGlzYWJsZS1zZXR1aWQtc2FuZGJveCcsCiAgICBdLAogICAgaWdub3JlRGVmYXVsdEFyZ3M6IFsnLS1lbmFibGUtYXV0b21hdGlvbiddLAogIH0sCn07CgpleHBvcnQgZGVmYXVsdCBkZWZpbmVDb25maWcoewogIHRlc3REaXI6ICcuL3NyYy90ZXN0cycsCiAgdGltZW91dDogMTIwXzAwMCwKICBleHBlY3Q6IHsgdGltZW91dDogMTBfMDAwIH0sCiAgZnVsbHlQYXJhbGxlbDogZmFsc2UsCiAgZm9yYmlkT25seTogISFwcm9jZXNzLmVudi5DSSwKICByZXRyaWVzOiBwcm9jZXNzLmVudi5DSSA/IDIgOiAwLAogIHdvcmtlcnM6IDEsCiAgcmVwb3J0ZXI6IFsKICAgIFsnaHRtbCcsIHsgb3BlbjogJ25ldmVyJyB9XSwKICAgIFsnanNvbicsIHsgb3V0cHV0RmlsZTogJ3Rlc3QtcmVzdWx0cy9yZXN1bHRzLmpzb24nIH1dLAogICAgWydsaXN0J10sCiAgXSwKICB1c2U6IHsKICAgIGJhc2VVUkw6IGNvbmZpZ0ZpbGUuYmFzZVVybCwKICAgIHRyYWNlOiAnb24tZmlyc3QtcmV0cnknLAogICAgc2NyZWVuc2hvdDogJ29ubHktb24tZmFpbHVyZScsCiAgICB2aWRlbzogJ29uLWZpcnN0LXJldHJ5JywKICAgIGFjdGlvblRpbWVvdXQ6IDE1XzAwMCwKICAgIG5hdmlnYXRpb25UaW1lb3V0OiAzMF8wMDAsCiAgICBpZ25vcmVIVFRQU0Vycm9yczogdHJ1ZSwKICB9LAogIHByb2plY3RzOiBbCiAgICAvKioKICAgICAqIFNldHVwIHByb2plY3Qg4oCUIGxvZ3MgaW4gb25jZSBhbmQgc2F2ZXMgY29va2llcy9sb2NhbFN0b3JhZ2UgdG8gLmF1dGgvc3RhdGUuanNvbi4KICAgICAqIFNraXBzIGF1dG9tYXRpY2FsbHkgd2hlbiB0aGUgc2F2ZWQgc3RhdGUgaXMgbGVzcyB0aGFuIDggaG91cnMgb2xkLgogICAgICogT24gZW52aXJvbm1lbnRzIHdoZXJlIHRoZSBXQUYgYmxvY2tzIHRoZSBzYW5kYm94IGVncmVzcyBJUCAoZS5nLiBwcmVwcm9kL0FrYW1haSksCiAgICAgKiB0aGUgc2V0dXAgdGVzdCBpdHNlbGYgd2lsbCBza2lwIHZpYSBzZXR1cC5za2lwKCkgc28gbm8gaGFyZCB0aW1lb3V0IG9jY3Vycy4KICAgICAqIFJ1biB0aGlzIHByb2plY3QgZXhwbGljaXRseTogIG5weCBwbGF5d3JpZ2h0IHRlc3QgLS1wcm9qZWN0PXNldHVwCiAgICAgKi8KICAgIHsKICAgICAgbmFtZTogJ3NldHVwJywKICAgICAgdGVzdE1hdGNoOiAvYXV0aFwuc2V0dXBcLnRzLywKICAgICAgdXNlOiB7IC4uLkNIUk9NRV9PUFRJT05TIH0sCiAgICB9LAoKICAgIC8qKgogICAgICogQXV0aGVudGljYXRlZCBwcm9qZWN0IOKAlCBzdGFydHMgZXZlcnkgdGVzdCBhbHJlYWR5IGxvZ2dlZCBpbiAodXNlcyBzYXZlZCBzZXNzaW9uKS4KICAgICAqIHN0b3JhZ2VTdGF0ZSBpcyBhdHRhY2hlZCBvbmx5IHdoZW4gLmF1dGgvc3RhdGUuanNvbiBleGlzdHM7IGlmIHNldHVwIHdhcyBza2lwcGVkCiAgICAgKiAoZS5nLiBBa2FtYWkgV0FGIGVudmlyb25tZW50IGlzc3VlKSB0ZXN0cyBzdGlsbCBydW4gd2l0aG91dCBhIHByZS1hdXRoIHNlc3Npb24KICAgICAqIHJhdGhlciB0aGFuIGNhc2NhZGUtZmFpbGluZyBkdWUgdG8gYSBtaXNzaW5nIGZpbGUuCiAgICAgKiBEZXBlbmRzIG9uICJzZXR1cCIgc28gdGhlIGF1dGggc3RhdGUgaXMgYWx3YXlzIGZyZXNoIGJlZm9yZSB0ZXN0cyBydW4uCiAgICAgKiBTa2lwcyBsb2dpbi5zcGVjLnRzICh0aGF0IGZpbGUgaGFzIGl0cyBvd24gcHJvamVjdCBiZWxvdykuCiAgICAgKgogICAgICogUnVuOiAgbnB4IHBsYXl3cmlnaHQgdGVzdCAtLXByb2plY3Q9Y2hyb21pdW0KICAgICAqLwogICAgewogICAgICBuYW1lOiAnY2hyb21pdW0nLAogICAgICB1c2U6IHsKICAgICAgICAuLi5DSFJPTUVfT1BUSU9OUywKICAgICAgICBzdG9yYWdlU3RhdGUsCiAgICAgIH0sCiAgICAgIGRlcGVuZGVuY2llczogWydzZXR1cCddLAogICAgICB0ZXN0SWdub3JlOiAvbG9naW5cLnNwZWNcLnRzLywKICAgIH0sCgogICAgLyoqCiAgICAgKiBMb2dpbiBwcm9qZWN0IOKAlCB0ZXN0cyB0aGUgbG9naW4gZmxvdyBmcm9tIHNjcmF0Y2ggd2l0aCBubyBzdG9yZWQgc2Vzc2lvbi4KICAgICAqIFRoaXMgaXMgdGhlIHByb2plY3QgZm9yIGxvZ2luLnNwZWMudHMgYW5kIGFueSBvdGhlciBhdXRoLWZsb3cgdGVzdHMuCiAgICAgKgogICAgICogUnVuOiAgbnB4IHBsYXl3cmlnaHQgdGVzdCAtLXByb2plY3Q9bG9naW4KICAgICAqLwogICAgewogICAgICBuYW1lOiAnbG9naW4nLAogICAgICB0ZXN0TWF0Y2g6IC9sb2dpblwuc3BlY1wudHMvLAogICAgICB1c2U6IHsgLi4uQ0hST01FX09QVElPTlMgfSwKICAgIH0sCiAgXSwKfSk7Cg==
+import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import * as fs from 'fs';
+import * as path from 'path';
+
+dotenv.config();
+
+const environment = (process.env.ENVIRONMENT ?? 'preprod').toLowerCase();
+const configFile  = require(path.join(__dirname, 'src/config/env', environment, 'config.json'));
+
+const AUTH_FILE = path.join(__dirname, '.auth', 'state.json');
+
+// Only attach storageState when the auth file actually exists.
+// When auth setup is skipped (e.g. Akamai WAF blocks sandbox egress on preprod),
+// the file will not be present — downstream chromium tests still run but
+// without a pre-authenticated session rather than failing outright.
+const storageState = fs.existsSync(AUTH_FILE) ? AUTH_FILE : undefined;
+
+const CHROME_OPTIONS = {
+  ...devices['Desktop Chrome'],
+  // headless mode required for CI/sandbox — Google Chrome binary is not available
+  headless: true,
+  launchOptions: {
+    // Suppress Chrome's automation signals so Cloudflare Turnstile auto-solves
+    args: [
+      '--disable-blink-features=AutomationControlled',
+      '--disable-infobars',
+      '--no-first-run',
+      '--no-default-browser-check',
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ],
+    ignoreDefaultArgs: ['--enable-automation'],
+  },
+};
+
+export default defineConfig({
+  testDir: './src/tests',
+  timeout: 120_000,
+  expect: { timeout: 10_000 },
+  fullyParallel: false,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: 1,
+  reporter: [
+    ['html', { open: 'never' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+    ['list'],
+  ],
+  use: {
+    baseURL: configFile.baseUrl,
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'on-first-retry',
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
+    ignoreHTTPSErrors: true,
+  },
+  projects: [
+    /**
+     * Setup project — logs in once and saves cookies/localStorage to .auth/state.json.
+     * Skips automatically when the saved state is less than 8 hours old.
+     * On environments where the WAF blocks the sandbox egress IP (e.g. preprod/Akamai),
+     * the setup test itself will skip via setup.skip() so no hard timeout occurs.
+     * Run this project explicitly:  npx playwright test --project=setup
+     */
+    {
+      name: 'setup',
+      testMatch: /auth\.setup\.ts/,
+      use: { ...CHROME_OPTIONS },
+    },
+
+    /**
+     * Authenticated project — starts every test already logged in (uses saved session).
+     * storageState is attached only when .auth/state.json exists; if setup was skipped
+     * (e.g. Akamai WAF environment issue) tests still run without a pre-auth session
+     * rather than cascade-failing due to a missing file.
+     * Depends on "setup" so the auth state is always fresh before tests run.
+     * Skips login.spec.ts (that file has its own project below).
+     *
+     * Run:  npx playwright test --project=chromium
+     */
+    {
+      name: 'chromium',
+      use: {
+        ...CHROME_OPTIONS,
+        storageState,
+      },
+      dependencies: ['setup'],
+      testIgnore: /login\.spec\.ts/,
+    },
+
+    /**
+     * Login project — tests the login flow from scratch with no stored session.
+     * This is the project for login.spec.ts and any other auth-flow tests.
+     *
+     * Run:  npx playwright test --project=login
+     */
+    {
+      name: 'login',
+      testMatch: /login\.spec\.ts/,
+      use: { ...CHROME_OPTIONS },
+    },
+  ],
+});
