@@ -1,2 +1,5 @@
 export { LoginModule } from './LoginModule';
-export { ManageQuantityModule } from './ManageQuantityModule';
+export { ProjectModule } from './ProjectModule';
+export { WorkbenchModule } from './WorkbenchModule';
+export { SLDModule } from './SLDModule';
+export { ExportModule } from './ExportModule';
