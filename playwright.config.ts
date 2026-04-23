@@ -11,10 +11,8 @@ const AUTH_FILE = path.join(__dirname, '.auth', 'state.json');
 
 const CHROME_OPTIONS = {
   ...devices['Desktop Chrome'],
-  channel: 'chrome',
-  // Headful mode — required so Cloudflare Turnstile auto-solves instead of silently failing.
-  // In headless mode, CF detects automation and never fills input[name="captcha"].
-  headless: false,
+  // headless mode required for CI/sandbox — Google Chrome binary is not available
+  headless: true,
   launchOptions: {
     // Suppress Chrome's automation signals so Cloudflare Turnstile auto-solves
     args: [
@@ -22,6 +20,8 @@ const CHROME_OPTIONS = {
       '--disable-infobars',
       '--no-first-run',
       '--no-default-browser-check',
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
     ],
     ignoreDefaultArgs: ['--enable-automation'],
   },
