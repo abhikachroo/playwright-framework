@@ -1,10 +1,12 @@
 import { test as base } from '@playwright/test';
-import { LoginPage } from '@pages/index';
-import { LoginModule } from '@modules/index';
+import { LoginPage, SldPage } from '@pages/index';
+import { LoginModule, SldFilterModule } from '@modules/index';
 
 type TestFixtures = {
   loginPage: LoginPage;
   loginModule: LoginModule;
+  sldPage: SldPage;
+  sldFilterModule: SldFilterModule;
 };
 
 export const test = base.extend<TestFixtures>({
@@ -13,6 +15,12 @@ export const test = base.extend<TestFixtures>({
   },
   loginModule: async ({ page, loginPage }, use) => {
     await use(new LoginModule(page, loginPage));
+  },
+  sldPage: async ({ page }, use) => {
+    await use(new SldPage(page));
+  },
+  sldFilterModule: async ({ page, sldPage }, use) => {
+    await use(new SldFilterModule(page, sldPage));
   },
 });
 
