@@ -9,23 +9,53 @@ const configFile  = require(path.join(__dirname, 'src/config/env', environment, 
 
 const AUTH_FILE = path.join(__dirname, '.auth', 'state.json');
 
-const CHROME_OPTIONS = {
-  ...devices['Desktop Chrome'],
-  channel: 'chrome',
-  // Headful mode — required so Cloudflare Turnstile auto-solves instead of silently failing.
-  // In headless mode, CF detects automation and never fills input[name="captcha"].
-  headless: false,
-  launchOptions: {
-    // Suppress Chrome's automation signals so Cloudflare Turnstile auto-solves
-    args: [
-      '--disable-blink-features=AutomationControlled',
-      '--disable-infobars',
-      '--no-first-run',
-      '--no-default-browser-check',
-    ],
-    ignoreDefaultArgs: ['--enable-automation'],
-  },
-};
+/**
+ * CI detection — set by most CI/CD platforms (GitHub Actions, Jenkins, CircleCI, etc.)
+ * When CI=true: use Playwright-managed Chromium in headless mode (no system Chrome required).
+ * When CI is unset (local dev): use system Google Chrome in headful mode so Cloudflare
+ * Turnstile auto-solves correctly (headless mode is detected by CF and blocks automation).
+ */
+const isCI = !!process.env.CI;
+
+const CHROME_OPTIONS = isCI
+  ? {
+      // ── CI / sandbox mode ──────────────────────────────────────────────────────
+      // Uses Playwright-managed Chromium binary — no system Chrome required.
+      // Turnstile may still challenge headless Chromium; a pre-baked .auth/state.json
+      // (injected as a CI secret/artifact) is the recommended long-term solution for
+      // environments that block headless browsers entirely.
+      ...devices['Desktop Chrome'],
+      headless: true,
+      launchOptions: {
+        args: [
+          '--disable-blink-features=AutomationControlled',
+          '--disable-infobars',
+          '--no-first-run',
+          '--no-default-browser-check',
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+        ],
+        ignoreDefaultArgs: ['--enable-automation'],
+      },
+    }
+  : {
+      // ── Local dev mode ─────────────────────────────────────────────────────────
+      // Requires Google Chrome installed at system path (/opt/google/chrome/chrome).
+      // Headful mode is necessary so Cloudflare Turnstile auto-solves instead of
+      // silently failing (CF detects headless automation and never fills the captcha).
+      ...devices['Desktop Chrome'],
+      channel: 'chrome',
+      headless: false,
+      launchOptions: {
+        args: [
+          '--disable-blink-features=AutomationControlled',
+          '--disable-infobars',
+          '--no-first-run',
+          '--no-default-browser-check',
+        ],
+        ignoreDefaultArgs: ['--enable-automation'],
+      },
+    };
 
 export default defineConfig({
   testDir: './src/tests',
@@ -63,7 +93,7 @@ export default defineConfig({
 
     /**
      * Authenticated project — starts every test already logged in (uses saved session).
-     * Depends on "setup" so the auth state is always fresh before tests run.
+     * Depends on 'setup' so the auth state is always fresh before tests run.
      * Skips login.spec.ts (that file has its own project below).
      *
      * Run:  npx playwright test --project=chromium
