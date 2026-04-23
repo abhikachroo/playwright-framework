@@ -1,84 +1,65 @@
-import { Page, Locator } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
-/**
- * SLDPage — Layer 2 (Locators & basic UI actions only).
- * Covers the Single Line Diagram page: diagram canvas,
- * product count labels at root and branch levels.
- *
- * ALL selectors marked // TODO: verify selector were inferred because
- * the application is behind an Akamai IP whitelist and could not be
- * inspected directly.
- */
 export class SLDPage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
 
-  // ── Page-level ─────────────────────────────────────────────────────────────
-  /** Main SLD diagram container */
-  diagramContainer = (): Locator =>
-    this.page.locator('[data-testid="sld-diagram"], .sld-diagram, [aria-label*="Single Line Diagram"]').first(); // TODO: verify selector
+  // ── Page heading ──────────────────────────────────────────────────────────
+  sldHeading          = () => this.page.getByRole('heading', { name: /single line diagram|sld/i }).first();
+  sldCanvas           = () => this.page.locator('[data-testid="sld-canvas"], [class*="sld-canvas"], svg').first(); // TODO: verify selector
+  sldLoadedIndicator  = () => this.page.locator('[data-testid="sld-container"]').first(); // TODO: verify selector
 
-  /** Page heading confirming we are on the SLD page */
-  sldPageHeading = (): Locator =>
-    this.page.getByRole('heading', { name: /single line diagram|sld/i }).first(); // TODO: verify selector
+  // ── SLD product nodes ─────────────────────────────────────────────────────
+  allSldNodes         = () => this.page.locator('[data-testid="sld-node"], [class*="sld-node"]');
+  rootLevelNodes      = () => this.page.locator('[data-testid="sld-root-node"], [data-sld-level="root"]');
+  branchLevelNodes    = () => this.page.locator('[data-testid="sld-branch-node"], [data-sld-level="branch"]');
 
-  // ── Product representation in SLD ─────────────────────────────────────────
-  /**
-   * Root-level product node in the SLD diagram (by product name).
-   * The node label typically shows "ProductName × N" or "ProductName (N)".
-   */
-  rootProductNode = (productName: string): Locator =>
-    this.page.locator('[data-testid="sld-node"]').filter({ hasText: productName }).first(); // TODO: verify selector
+  // ── Quantity display within SLD nodes ─────────────────────────────────────
+  quantityLabelInNode = (nodeIndex: number) =>
+    this.page.locator('[data-testid="sld-node"]').nth(nodeIndex).locator('[data-testid="node-quantity"]').first(); // TODO: verify selector
+  allQuantityLabels   = () => this.page.locator('[data-testid="node-quantity"], [class*="node-quantity"]');
 
-  /**
-   * Branch-level product node in the SLD diagram (by product name).
-   */
-  branchProductNode = (productName: string): Locator =>
-    this.page.locator('[data-testid="sld-branch-node"]').filter({ hasText: productName }).first(); // TODO: verify selector
+  // ── Level hierarchy structure ─────────────────────────────────────────────
+  hierarchyContainer  = () => this.page.locator('[data-testid="sld-hierarchy"], [class*="hierarchy"]').first(); // TODO: verify selector
+  rootLevel           = () => this.page.locator('[data-sld-level="root"], [data-testid="sld-level-root"]').first(); // TODO: verify selector
+  branchLevel         = () => this.page.locator('[data-sld-level="branch"], [data-testid="sld-level-branch"]').first(); // TODO: verify selector
 
-  /**
-   * Quantity label shown on a root product node in the SLD.
-   * Typically rendered as "×N", "(N)", or a standalone badge.
-   */
-  rootProductCountLabel = (productName: string): Locator =>
-    this.rootProductNode(productName)
-      .locator('[data-testid="qty-label"], .qty-label, [aria-label*="count"], [aria-label*="quantity"]').first(); // TODO: verify selector
+  // ── Empty state ───────────────────────────────────────────────────────────
+  emptySldMessage     = () => this.page.locator('[data-testid="sld-empty"], [class*="empty-state"]').first(); // TODO: verify selector
 
-  /**
-   * Quantity label shown on a branch product node in the SLD.
-   */
-  branchProductCountLabel = (productName: string): Locator =>
-    this.branchProductNode(productName)
-      .locator('[data-testid="qty-label"], .qty-label, [aria-label*="count"], [aria-label*="quantity"]').first(); // TODO: verify selector
+  // ── Loading state ─────────────────────────────────────────────────────────
+  loadingSpinner      = () => this.page.locator('[data-testid="loading-spinner"], [role="progressbar"], [class*="spinner"]').first(); // TODO: verify selector
 
-  /**
-   * Generic locator for any count/quantity label anywhere on the SLD page.
-   * Useful for counting total labelled nodes.
-   */
-  allCountLabels = (): Locator =>
-    this.page.locator('[data-testid="qty-label"], .qty-label').filter({ hasNotText: '' }); // TODO: verify selector
-
-  // ── Simple UI actions ──────────────────────────────────────────────────────
-
-  async waitForDiagram(): Promise<void> {
-    await this.diagramContainer().waitFor({ state: 'visible', timeout: 20_000 });
+  // ── Actions ───────────────────────────────────────────────────────────────
+  async getRootNodeCount(): Promise<number> {
+    return this.rootLevelNodes().count();
   }
 
-  async getRootProductCountText(productName: string): Promise<string> {
-    return (await this.rootProductCountLabel(productName).textContent()) ?? '';
+  async getBranchNodeCount(): Promise<number> {
+    return this.branchLevelNodes().count();
   }
 
-  async getBranchProductCountText(productName: string): Promise<string> {
-    return (await this.branchProductCountLabel(productName).textContent()) ?? '';
+  async getAllNodeCount(): Promise<number> {
+    return this.allSldNodes().count();
   }
 
-  async getDiagramText(): Promise<string> {
-    return (await this.diagramContainer().textContent()) ?? '';
+  async getQuantityLabelText(nodeIndex: number): Promise<string> {
+    return (await this.quantityLabelInNode(nodeIndex).textContent()) ?? '';
   }
 
-  async countVisibleNodes(): Promise<number> {
-    return this.page.locator('[data-testid="sld-node"], [data-testid="sld-branch-node"]').count(); // TODO: verify selector
+  async getAllQuantityLabelTexts(): Promise<string[]> {
+    const labels = this.allQuantityLabels();
+    const count = await labels.count();
+    const texts: string[] = [];
+    for (let i = 0; i < count; i++) {
+      texts.push((await labels.nth(i).textContent()) ?? '');
+    }
+    return texts;
+  }
+
+  async isEmptyStateVisible(): Promise<boolean> {
+    return this.emptySldMessage().isVisible();
   }
 }

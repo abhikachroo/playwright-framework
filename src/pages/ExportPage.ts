@@ -1,97 +1,66 @@
-import { Page, Locator, Download } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
-/**
- * ExportPage — Layer 2 (Locators & basic UI actions only).
- * Covers the Export page: bulk export with SLD checkbox,
- * and category-level SLD export (raw SLD).
- *
- * ALL selectors marked // TODO: verify selector were inferred because
- * the application is behind an Akamai IP whitelist and could not be
- * inspected directly.
- */
 export class ExportPage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
 
-  // ── Page heading ───────────────────────────────────────────────────────────
-  exportPageHeading = (): Locator =>
-    this.page.getByRole('heading', { name: /export/i }).first(); // TODO: verify selector
+  // ── Export page heading ───────────────────────────────────────────────────
+  exportHeading          = () => this.page.getByRole('heading', { name: /export/i }).first();
+  exportPageContainer    = () => this.page.locator('[data-testid="export-container"]').first(); // TODO: verify selector
 
-  // ── Bulk export section ────────────────────────────────────────────────────
-  /** "SLD" checkbox in the bulk export options list */
-  bulkExportSldCheckbox = (): Locator =>
-    this.page.getByRole('checkbox', { name: /sld|single line diagram/i }); // TODO: verify selector
+  // ── Bulk export section ───────────────────────────────────────────────────
+  bulkExportSection      = () => this.page.locator('[data-testid="bulk-export"], [class*="bulk-export"]').first(); // TODO: verify selector
+  sldCheckbox            = () => this.page.getByRole('checkbox', { name: /sld/i }).first();
+  sldCheckboxByTestId    = () => this.page.locator('[data-testid="export-sld-checkbox"]').first(); // TODO: verify selector
+  exportAllBtn           = () => this.page.getByRole('button', { name: /export all|bulk export/i }).first(); // TODO: verify selector
+  bulkExportBtn          = () => this.page.getByRole('button', { name: /export/i }).first();
 
-  /** Primary "Export" / "Download" button for bulk export */
-  bulkExportBtn = (): Locator =>
-    this.page.getByRole('button', { name: /^export$|^download$/i }).first(); // TODO: verify selector
+  // ── Category export section ───────────────────────────────────────────────
+  categoryExportSection  = () => this.page.locator('[data-testid="category-export"], [class*="category-export"]').first(); // TODO: verify selector
+  sldCategoryBtn         = () => this.page.getByRole('button', { name: /export sld|sld export/i }).first(); // TODO: verify selector
+  sldCategoryLink        = () => this.page.getByRole('link', { name: /sld/i }).first(); // TODO: verify selector
 
-  /** Success toast / confirmation message after bulk export */
-  bulkExportSuccessMsg = (): Locator =>
-    this.page.locator('[role="alert"], [data-testid="export-success"], .export-success').first(); // TODO: verify selector
+  // ── Export status & feedback ─────────────────────────────────────────────
+  exportSuccessMessage   = () => this.page.locator('[data-testid="export-success"], [role="alert"][class*="success"], [class*="success-message"]').first(); // TODO: verify selector
+  exportErrorMessage     = () => this.page.locator('[data-testid="export-error"], [role="alert"][class*="error"], [class*="error-message"]').first(); // TODO: verify selector
+  downloadProgressBar    = () => this.page.locator('[data-testid="download-progress"], [role="progressbar"]').first(); // TODO: verify selector
 
-  // ── Category export section ────────────────────────────────────────────────
-  /**
-   * "SLD" category export button or link (raw SLD export).
-   * This is distinct from the bulk export SLD checkbox.
-   */
-  categorySldExportBtn = (): Locator =>
-    this.page.getByRole('button', { name: /export sld|sld export/i }); // TODO: verify selector
-
-  /** Alternative: SLD item in a category list that has its own export control */
-  categorySldExportItem = (): Locator =>
-    this.page.getByRole('listitem').filter({ hasText: /^sld$/i })
-      .getByRole('button', { name: /export|download/i }); // TODO: verify selector
-
-  /** Success message for category SLD export */
-  categoryExportSuccessMsg = (): Locator =>
-    this.page.locator('[role="alert"], [data-testid="category-export-success"]').first(); // TODO: verify selector
-
-  // ── Download helper ────────────────────────────────────────────────────────
-  /** Generic download confirmation / progress indicator */
-  downloadProgressIndicator = (): Locator =>
-    this.page.locator('[data-testid="download-progress"], .download-progress').first(); // TODO: verify selector
-
-  // ── Simple UI actions ──────────────────────────────────────────────────────
-
-  async tickBulkExportSld(): Promise<void> {
-    await this.bulkExportSldCheckbox().check();
+  // ── Actions ───────────────────────────────────────────────────────────────
+  async checkSldCheckbox(): Promise<void> {
+    const cb = this.sldCheckbox();
+    const isChecked = await cb.isChecked();
+    if (!isChecked) {
+      await cb.check();
+    }
   }
 
-  async untickBulkExportSld(): Promise<void> {
-    await this.bulkExportSldCheckbox().uncheck();
+  async uncheckSldCheckbox(): Promise<void> {
+    const cb = this.sldCheckbox();
+    const isChecked = await cb.isChecked();
+    if (isChecked) {
+      await cb.uncheck();
+    }
   }
 
-  async isBulkExportSldChecked(): Promise<boolean> {
-    return this.bulkExportSldCheckbox().isChecked();
+  async isSldCheckboxChecked(): Promise<boolean> {
+    return this.sldCheckbox().isChecked();
   }
 
-  async clickBulkExport(): Promise<Download> {
-    const [download] = await Promise.all([
-      this.page.waitForEvent('download'),
-      this.bulkExportBtn().click(),
-    ]);
-    return download;
+  async clickBulkExport(): Promise<void> {
+    await this.bulkExportBtn().click();
   }
 
-  async clickCategorySldExport(): Promise<Download> {
-    const [download] = await Promise.all([
-      this.page.waitForEvent('download'),
-      this.categorySldExportBtn().click().catch(async () => {
-        // Fallback: try the category list item export button
-        await this.categorySldExportItem().click();
-      }),
-    ]);
-    return download;
+  async clickExportSldCategory(): Promise<void> {
+    await this.sldCategoryBtn().click();
   }
 
-  async getBulkExportSuccessText(): Promise<string> {
-    return (await this.bulkExportSuccessMsg().textContent()) ?? '';
+  async getExportSuccessText(): Promise<string> {
+    return (await this.exportSuccessMessage().textContent()) ?? '';
   }
 
-  async getCategoryExportSuccessText(): Promise<string> {
-    return (await this.categoryExportSuccessMsg().textContent()) ?? '';
+  async getExportErrorText(): Promise<string> {
+    return (await this.exportErrorMessage().textContent()) ?? '';
   }
 }

@@ -1,168 +1,98 @@
-import { Page, Locator } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
-/**
- * WorkbenchPage — Layer 2 (Locators & basic UI actions only).
- * Covers the switchboard workbench: product selection panel,
- * product cards, and quantity controls.
- *
- * ALL selectors marked // TODO: verify selector were inferred because
- * the application is behind an Akamai IP whitelist and could not be
- * inspected directly. Replace each TODO with the verified selector
- * found by running the locator extraction script on a whitelisted network.
- */
 export class WorkbenchPage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
 
-  // ── Navigation ────────────────────────────────────────────────────────────
-  /** Top-level "Projects" link in the main navigation */
-  projectsNavLink = (): Locator =>
-    this.page.getByRole('link', { name: /projects/i });
+  // ── Products Selection page header ────────────────────────────────────────
+  productsSelectionHeading = () => this.page.getByRole('heading', { name: /products selection/i }).first();
+  pageLoadedIndicator      = () => this.page.locator('[data-testid="workbench-container"]').first(); // TODO: verify selector
 
-  /** Project card or row identified by project name */
-  projectCard = (projectName: string): Locator =>
-    this.page.getByRole('heading', { name: projectName });
+  // ── Product catalogue / search ────────────────────────────────────────────
+  productSearchInput       = () => this.page.getByRole('searchbox').first(); // TODO: verify selector
+  productSearchBtn         = () => this.page.getByRole('button', { name: /search/i }).first();
+  productCataloguePanel    = () => this.page.locator('[data-testid="product-catalogue"], [class*="catalogue"]').first(); // TODO: verify selector
 
-  /** Switchboard item within a project */
-  switchboardItem = (switchboardName: string): Locator =>
-    this.page.getByRole('link', { name: switchboardName });
+  // ── Add product at root level ─────────────────────────────────────────────
+  rootLevelAddBtn          = () => this.page.getByRole('button', { name: /add product|add at root/i }).first(); // TODO: verify selector
+  productCardInCatalogue   = (name: string) => this.page.getByRole('button', { name }).first();
+  firstProductInCatalogue  = () => this.page.locator('[data-testid="product-item"], [class*="product-item"]').first(); // TODO: verify selector
+  addToRootBtn             = () => this.page.getByRole('button', { name: /add to root/i }).first(); // TODO: verify selector
 
-  // ── Products panel ─────────────────────────────────────────────────────────
-  /** "Products" tab / section heading on the workbench */
-  productsTabHeading = (): Locator =>
-    this.page.getByRole('heading', { name: /products/i }).first(); // TODO: verify selector
+  // ── Add product at end-of-branch level ───────────────────────────────────
+  branchNodeSelector       = () => this.page.locator('[data-testid="branch-node"], [class*="branch-node"]').first(); // TODO: verify selector
+  addToBranchBtn           = () => this.page.getByRole('button', { name: /add to branch|add end of branch/i }).first(); // TODO: verify selector
 
-  /** Search / filter input for the product catalogue */
-  productSearchInput = (): Locator =>
-    this.page.getByRole('searchbox').first(); // TODO: verify selector
+  // ── Quantity controls ─────────────────────────────────────────────────────
+  quantityInput            = () => this.page.getByRole('spinbutton').first();
+  quantityInputByLabel     = (label: string) => this.page.getByLabel(label); // TODO: verify selector
+  quantityIncrementBtn     = () => this.page.getByRole('button', { name: /increment|\+/i }).first(); // TODO: verify selector
+  quantityDecrementBtn     = () => this.page.getByRole('button', { name: /decrement|-/i }).first(); // TODO: verify selector
+  confirmQuantityBtn       = () => this.page.getByRole('button', { name: /confirm|apply|ok/i }).first(); // TODO: verify selector
 
-  /** Individual product entry in the catalogue panel (by display name) */
-  productCatalogueItem = (productName: string): Locator =>
-    this.page.getByRole('listitem').filter({ hasText: productName }).first(); // TODO: verify selector
+  // ── Added product cards (canvas / tree) ───────────────────────────────────
+  productCardsOnCanvas     = () => this.page.locator('[data-testid="product-card"], [class*="product-card"]');
+  quantityBadgeOnCard      = () => this.page.locator('[data-testid="quantity-badge"], [class*="quantity-badge"]').first(); // TODO: verify selector
+  quantityBoxOnCard        = () => this.page.locator('[data-testid="quantity-box"], [class*="quantity"]').first(); // TODO: verify selector
+  rootLevelProductCards    = () => this.page.locator('[data-testid="root-product-card"], [data-level="root"]');
+  branchLevelProductCards  = () => this.page.locator('[data-testid="branch-product-card"], [data-level="branch"]');
 
-  /** "Add" button on a catalogue product item */
-  addProductBtn = (productName: string): Locator =>
-    this.page.getByRole('listitem').filter({ hasText: productName })
-      .getByRole('button', { name: /add/i }); // TODO: verify selector
+  // ── Validation messages ───────────────────────────────────────────────────
+  quantityValidationError  = () => this.page.locator('[role="alert"], [data-testid="quantity-error"], [class*="validation-error"]').first(); // TODO: verify selector
 
-  // ── Workbench canvas cards ─────────────────────────────────────────────────
-  /** Root-level product card on the workbench canvas (by product name) */
-  rootProductCard = (productName: string): Locator =>
-    this.page.locator('[data-testid="product-card"]').filter({ hasText: productName }).first(); // TODO: verify selector
+  // ── Navigation tabs ───────────────────────────────────────────────────────
+  sldTabBtn                = () => this.page.getByRole('tab', { name: /sld/i }).first();
+  exportTabBtn             = () => this.page.getByRole('tab', { name: /export/i }).first();
+  productsTabBtn           = () => this.page.getByRole('tab', { name: /products selection/i }).first();
 
-  /** End-of-branch product card (child/branch level) */
-  branchProductCard = (productName: string): Locator =>
-    this.page.locator('[data-testid="branch-product-card"]').filter({ hasText: productName }).first(); // TODO: verify selector
-
-  /** Quantity input box displayed on a root product card */
-  rootProductQtyInput = (productName: string): Locator =>
-    this.rootProductCard(productName).locator('input[type="number"], [data-testid="qty-input"]').first(); // TODO: verify selector
-
-  /** Quantity input box displayed on a branch product card */
-  branchProductQtyInput = (productName: string): Locator =>
-    this.branchProductCard(productName).locator('input[type="number"], [data-testid="qty-input"]').first(); // TODO: verify selector
-
-  /** Quantity increment (+) button on a root product card */
-  rootQtyIncrementBtn = (productName: string): Locator =>
-    this.rootProductCard(productName).getByRole('button', { name: '+' }); // TODO: verify selector
-
-  /** Quantity decrement (−) button on a root product card */
-  rootQtyDecrementBtn = (productName: string): Locator =>
-    this.rootProductCard(productName).getByRole('button', { name: '-' }); // TODO: verify selector
-
-  /** Quantity increment (+) button on a branch product card */
-  branchQtyIncrementBtn = (productName: string): Locator =>
-    this.branchProductCard(productName).getByRole('button', { name: '+' }); // TODO: verify selector
-
-  /** Quantity decrement (−) button on a branch product card */
-  branchQtyDecrementBtn = (productName: string): Locator =>
-    this.branchProductCard(productName).getByRole('button', { name: '-' }); // TODO: verify selector
-
-  /** The visible quantity badge/label shown on the product card */
-  rootProductQtyBadge = (productName: string): Locator =>
-    this.rootProductCard(productName).locator('[data-testid="qty-badge"], .qty-badge, [aria-label*="quantity"]').first(); // TODO: verify selector
-
-  /** The visible quantity badge/label shown on the branch product card */
-  branchProductQtyBadge = (productName: string): Locator =>
-    this.branchProductCard(productName).locator('[data-testid="qty-badge"], .qty-badge, [aria-label*="quantity"]').first(); // TODO: verify selector
-
-  // ── Navigation to other pages ──────────────────────────────────────────────
-  /** "SLD" navigation link / tab from the workbench */
-  sldNavLink = (): Locator =>
-    this.page.getByRole('link', { name: /sld/i }); // TODO: verify selector
-
-  /** "Export" navigation link / tab */
-  exportNavLink = (): Locator =>
-    this.page.getByRole('link', { name: /export/i }); // TODO: verify selector
-
-  // ── Simple UI actions ──────────────────────────────────────────────────────
-
-  async clickProjectsNav(): Promise<void> {
-    await this.projectsNavLink().click();
-  }
-
-  async openProject(projectName: string): Promise<void> {
-    await this.projectCard(projectName).click();
-  }
-
-  async openSwitchboard(switchboardName: string): Promise<void> {
-    await this.switchboardItem(switchboardName).click();
-    await this.waitForPageLoad();
-  }
-
-  async searchProduct(query: string): Promise<void> {
-    await this.productSearchInput().fill(query);
-  }
-
-  async addProductToWorkbench(productName: string): Promise<void> {
-    await this.addProductBtn(productName).click();
-  }
-
-  async setRootProductQuantity(productName: string, quantity: number): Promise<void> {
-    const input = this.rootProductQtyInput(productName);
+  // ── Actions ───────────────────────────────────────────────────────────────
+  async fillQuantityInput(value: number): Promise<void> {
+    const input = this.quantityInput();
     await input.clear();
-    await input.fill(String(quantity));
+    await input.fill(String(value));
   }
 
-  async setBranchProductQuantity(productName: string, quantity: number): Promise<void> {
-    const input = this.branchProductQtyInput(productName);
+  async fillQuantityInputByLabel(label: string, value: number): Promise<void> {
+    const input = this.quantityInputByLabel(label);
     await input.clear();
-    await input.fill(String(quantity));
+    await input.fill(String(value));
   }
 
-  async incrementRootQty(productName: string): Promise<void> {
-    await this.rootQtyIncrementBtn(productName).click();
+  async clickFirstProductInCatalogue(): Promise<void> {
+    await this.firstProductInCatalogue().click();
   }
 
-  async decrementRootQty(productName: string): Promise<void> {
-    await this.rootQtyDecrementBtn(productName).click();
+  async clickAddToRoot(): Promise<void> {
+    await this.addToRootBtn().click();
   }
 
-  async incrementBranchQty(productName: string): Promise<void> {
-    await this.branchQtyIncrementBtn(productName).click();
+  async clickAddToBranch(): Promise<void> {
+    await this.addToBranchBtn().click();
   }
 
-  async decrementBranchQty(productName: string): Promise<void> {
-    await this.branchQtyDecrementBtn(productName).click();
+  async clickConfirmQuantity(): Promise<void> {
+    await this.confirmQuantityBtn().click();
   }
 
-  async navigateToSLD(): Promise<void> {
-    await this.sldNavLink().click();
-    await this.waitForPageLoad();
+  async clickSldTab(): Promise<void> {
+    await this.sldTabBtn().click();
   }
 
-  async navigateToExport(): Promise<void> {
-    await this.exportNavLink().click();
-    await this.waitForPageLoad();
+  async clickExportTab(): Promise<void> {
+    await this.exportTabBtn().click();
   }
 
-  async getRootProductQtyValue(productName: string): Promise<string> {
-    return (await this.rootProductQtyInput(productName).inputValue()) ?? '';
+  async getQuantityBoxText(): Promise<string> {
+    return (await this.quantityBoxOnCard().textContent()) ?? '';
   }
 
-  async getBranchProductQtyValue(productName: string): Promise<string> {
-    return (await this.branchProductQtyInput(productName).inputValue()) ?? '';
+  async getValidationErrorText(): Promise<string> {
+    return (await this.quantityValidationError().textContent()) ?? '';
+  }
+
+  async getProductCardCount(): Promise<number> {
+    return this.productCardsOnCanvas().count();
   }
 }
