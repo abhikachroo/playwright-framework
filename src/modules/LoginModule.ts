@@ -77,14 +77,4 @@ export class LoginModule {
     this.logger.info('Login completed');
   }
 
-  async verifyLoginFailed(expectedError: string): Promise<void> {
-    const { expect } = await import('@playwright/test');
-    const errorText = await this.loginPage.getErrorText();
-    expect(errorText).toContain(expectedError);
-    this.logger.warn(`Login failed as expected: ${expectedError}`);
-  }
-
-  async getCurrentUrl(): Promise<string> {
-    return this.loginPage.getCurrentUrl();
-  }
 }
