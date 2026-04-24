@@ -1,5 +1,6 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import { LoginPage } from '@pages/LoginPage';
+import { HomePage } from '@pages/HomePage';
 import { Logger } from '@utils/Logger';
 import { config } from '@config/index';
 
@@ -9,9 +10,14 @@ export class LoginModule {
   constructor(
     private page: Page,
     private loginPage: LoginPage,
+    private homePage?: HomePage,
   ) {
     this.logger = new Logger('LoginModule');
   }
+
+  // ---------------------------------------------------------------------------
+  // Core login flow — DO NOT MODIFY (handles Azure AD B2C + Turnstile CAPTCHA)
+  // ---------------------------------------------------------------------------
 
   async doLogin(
     username: string = config.username,
@@ -35,7 +41,7 @@ export class LoginModule {
     if (this.page.url().includes('identifier')) {
       // Let Turnstile auto-solve BEFORE touching the email field.
       // Calling fillEmail() triggers a React re-render that resets the Turnstile
-      // widget (from visible 1600×150 back to 0×0), preventing token generation.
+      // widget (from visible 1600x150 back to 0x0), preventing token generation.
       await this.loginPage.waitForAuth0CaptchaSolved(8_000);
 
       // Only fill email if the field is empty — Auth0 pre-fills it from the previous
@@ -77,4 +83,57 @@ export class LoginModule {
     this.logger.info('Login completed');
   }
 
+  // ---------------------------------------------------------------------------
+  // Extended methods added by QE-AI — Login feature test scenarios
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Verifies that the login error message element is visible and optionally
+   * contains the expected text. Uses auto-retrying expect assertions.
+   */
+  async verifyLoginFailed(expectedText?: string): Promise<void> {
+    this.logger.info(`Verifying login failure${expectedText ? `: "${expectedText}"` : ''}`);
+    await expect(this.loginPage.errorMessage()).toBeVisible();
+    if (expectedText) {
+      await expect(this.loginPage.errorMessage()).toContainText(expectedText);
+    }
+  }
+
+  /**
+   * Verifies that the error message container is visible.
+   * Use when the exact error copy is not yet confirmed.
+   */
+  async verifyErrorMessageVisible(): Promise<void> {
+    this.logger.info('Verifying error message is visible');
+    await expect(this.loginPage.errorMessage()).toBeVisible();
+  }
+
+  /**
+   * Performs logout via the HomePage account menu.
+   * Requires the `homePage` dependency to be injected.
+   */
+  async doLogout(): Promise<void> {
+    if (!this.homePage) {
+      throw new Error('LoginModule.doLogout() requires homePage to be injected via constructor');
+    }
+    this.logger.info('Performing logout');
+    // Open the account menu then click logout
+    // TODO: update openAccountMenu() if the logout link is directly in the header without a dropdown
+    await this.homePage.openAccountMenu();
+    await this.homePage.clickLogout();
+    await this.loginPage.waitForPageLoad();
+    this.logger.info('Logout completed');
+  }
+
+  /**
+   * Navigates directly to a protected route and asserts the browser is
+   * redirected to the login page.
+   */
+  async verifyProtectedRouteRedirect(protectedPath: string): Promise<void> {
+    this.logger.info(`Verifying protected route redirect for: ${protectedPath}`);
+    await this.page.goto(protectedPath);
+    await this.loginPage.waitForPageLoad();
+    await expect(this.page).toHaveURL(/login|signin|identifier|b2clogin/i);
+    this.logger.info('Protected route correctly redirected to login');
+  }
 }
